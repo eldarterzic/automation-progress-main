@@ -23,29 +23,23 @@ export const parseGoogleSheet = (file: File, useCases: UseCase[]): Promise<{ use
         // Function to safely get data from sheet
         const getSheetData = (sheetName: string) => {
           const sheet = workbook.Sheets[sheetName];
-          return sheet ? XLSX.utils.sheet_to_json(sheet, { header: 1 }) : [];
+          return sheet ? (XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][]) : [];
         };
 
         // Parse Use Cases
         const useCasesSheetData = getSheetData('Use Cases');
-        const parsedUseCases = parseUseCasesSheet(useCasesSheetData);
+        const parsedUseCases = fetchUseCasesFromSheet(useCasesSheetData);
 
         // Parse Target Automation Levels
         const targetLevelsSheetData = getSheetData('Target Automation Levels');
-        const parsedTargetLevels = parseTargetLevelsSheet(targetLevelsSheetData, parsedUseCases);
+        const parsedTargetLevels = fetchTargetLevelsFromSheet(targetLevelsSheetData, parsedUseCases);
 
         // Parse Reporting Data
         const reportingDataSheetData = getSheetData('Reporting Data');
-        const parsedReportingData = parseReportingDataSheet(reportingDataSheetData);
+        const parsedReportingData = fetchReportingDataFromSheet(reportingDataSheetData);
 
         // Merge target levels into use cases
-        const mergedUseCases = parsedUseCases.map(useCase => {
-          const targetLevelData = parsedTargetLevels.find(target => target.id === useCase.id);
-          return {
-            ...useCase,
-            targetLevel: targetLevelData ? targetLevelData.targetLevel : useCase.targetLevel,
-          };
-        });
+        const mergedUseCases = mergeUseCases(parsedUseCases, parsedTargetLevels);
 
         resolve({ useCases: mergedUseCases, reportingData: parsedReportingData });
       } catch (error) {
@@ -119,3 +113,36 @@ const parseReportingDataSheet = (sheetData: any[][]): ReportingData[] => {
     return reportingData;
   });
 };
+
+export const fetchUseCasesFromSheet = (sheetData: any[][]): UseCase[] => {
+  return parseUseCasesSheet(sheetData);
+};
+
+export const fetchTargetLevelsFromSheet = (sheetData: any[][], useCases: UseCase[]): TargetLevel[] => {
+  return parseTargetLevelsSheet(sheetData, useCases);
+};
+
+export const fetchReportingDataFromSheet = (sheetData: any[][]): ReportingData[] => {
+  return parseReportingDataSheet(sheetData);
+};
+
+export const mergeUseCases = (useCases: UseCase[], targetLevels: TargetLevel[]): UseCase[] => {
+  return useCases.map(useCase => {
+    const targetLevelData = targetLevels.find(target => target.id === useCase.id);
+    return {
+      ...useCase,
+      targetLevel: targetLevelData ? targetLevelData.targetLevel : useCase.targetLevel,
+    };
+  });
+};
+
+export interface UseCase {
+  id: string;
+  name: string; // Added the missing 'name' property
+  description: string;
+  category: string;
+  currentLevel: number;
+  targetLevel: number;
+  inProduction: boolean;
+  developmentYear?: number;
+}
