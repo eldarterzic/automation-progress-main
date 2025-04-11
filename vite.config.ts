@@ -8,11 +8,18 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      // Proxy API requests to the Express server
+      "/api": {
+        target: "http://localhost:3000", // Express server
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api"), // Keep the /api prefix
+      },
+    },
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {

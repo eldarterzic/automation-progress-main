@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, LineChart, XAxis, YAxis, Tooltip, Bar, Line, ResponsiveContainer, Cell, Legend, ReferenceLine, LegendType } from 'recharts';
 import { ArrowUpRight, HelpCircle, Clock, DollarSign, BarChart3, TrendingUp, Calendar } from 'lucide-react';
@@ -10,6 +10,7 @@ import { UseCase } from '@/types/use-case';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ReportingData } from '@/utils/googleSheets';
 
+
 interface DashboardProps {
   useCases: UseCase[];
   reportingData?: ReportingData[];
@@ -17,6 +18,59 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ useCases, reportingData = [] }) => {
   const [activeTab, setActiveTab] = useState<string>('overview');
+  const [monthlyReach, setMonthlyReach] = useState<number>(0);
+  const [useCaseList, setUseCaseList] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+
+  useEffect(() => {
+    const fetchMonthlyReach = async () => {
+      setLoading(true); // Set loading to true before the API call
+      try {
+        const response = await fetch('http://localhost:3000/api/fetchMonthlyReach');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const totalReach = data.slice(1).reduce((acc, row) => acc + parseInt(row[5], 10), 0);
+        setMonthlyReach(totalReach);
+      } catch (error) {
+        console.error('Error fetching Monthly Reach data:', error.message);
+      } finally {
+        setLoading(false); // Set loading to false after the API call
+      }
+    };
+
+    fetchMonthlyReach();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsecaseList = async () => {
+      setLoading(true); // Set loading to true before the API call
+      try {
+        const response = await fetch('http://localhost:3000/api/fetchMonthlyReach');
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+  
+        // Assuming the Google Sheet contains rows where the second column (index 1) has the use case names
+        const usecaseList = data.slice(1).map((row) => row[1]); // Extract the second column as the use case list
+        console.log('Usecase List:', usecaseList);
+  
+        setUseCaseList(usecaseList); // Set the useCaseList state with the array of items
+      } catch (error) {
+        console.error('Error fetching Use Case List:', error.message);
+      } finally {
+        setLoading(false); // Set loading to false after the API call
+      }
+    };
+  
+    fetchUsecaseList();
+  }, []);
   
   // Calculate average current and target levels
   const avgCurrentLevel = useCases.reduce((acc, useCase) => acc + useCase.currentLevel, 0) / (useCases.length || 1);
@@ -227,6 +281,7 @@ const Dashboard: React.FC<DashboardProps> = ({ useCases, reportingData = [] }) =
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
           <Card className="glass-card">
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center">
@@ -242,6 +297,27 @@ const Dashboard: React.FC<DashboardProps> = ({ useCases, reportingData = [] }) =
             </CardContent>
           </Card>
           
+           {/* Monthly Reach Card */}
+           <Card className="glass-card">
+      <CardHeader className="pb-2">
+        <CardDescription className="flex items-center">
+          Monthly Reach
+        </CardDescription>
+        <CardTitle className="text-3xl">
+          {loading ? (
+            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-black"></div>
+          ) : (
+            monthlyReach.toLocaleString()
+          )}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-sm text-gray-500">
+          Total reach across all campaigns this month
+        </div>
+      </CardContent>
+    </Card>
+
           <Card className="glass-card">
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center">
