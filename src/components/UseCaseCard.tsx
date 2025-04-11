@@ -1,0 +1,85 @@
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { UseCase } from '@/types/use-case';
+
+interface UseCaseCardProps {
+  useCase: UseCase;
+  view?: 'grid' | 'list';
+  onSelect?: () => void;
+  delay?: number;
+}
+
+const UseCaseCard = ({ useCase, view = 'grid', onSelect, delay = 0 }: UseCaseCardProps) => {
+  if (view === 'list') {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay }}
+        className="bg-white p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-all hover:shadow-md"
+      >
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Badge variant="outline" className="text-xs font-normal">
+                {useCase.category}
+              </Badge>
+              <div className={`w-2 h-2 rounded-full ${getAutomationLevelColor(useCase.currentLevel)}`}></div>
+              <span className="text-xs text-gray-500">Level {useCase.currentLevel}</span>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">{useCase.title}</h3>
+            <p className="text-sm text-gray-500 line-clamp-2">{useCase.description}</p>
+          </div>
+          <div className="flex items-center">
+            <Button variant="ghost" size="sm" className="gap-1 hover:gap-2 transition-all" onClick={onSelect}>
+              Map Use Case <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay }}
+      className="bg-white p-5 rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all h-full flex flex-col hover-lift"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <Badge variant="outline" className="text-xs font-normal">
+          {useCase.category}
+        </Badge>
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${getAutomationLevelColor(useCase.currentLevel)}`}></div>
+          <span className="text-xs text-gray-500">Level {useCase.currentLevel}</span>
+        </div>
+      </div>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">{useCase.title}</h3>
+      <p className="text-sm text-gray-500 mb-4 line-clamp-3 flex-grow">{useCase.description}</p>
+      <Button variant="ghost" size="sm" className="gap-1 hover:gap-2 transition-all mt-auto self-start" onClick={onSelect}>
+        Map Use Case <ArrowRight className="h-4 w-4" />
+      </Button>
+    </motion.div>
+  );
+};
+
+// Helper function to get color based on automation level
+function getAutomationLevelColor(level: number): string {
+  switch (level) {
+    case 0: return 'bg-gray-400';
+    case 1: return 'bg-blue-400';
+    case 2: return 'bg-green-400';
+    case 3: return 'bg-yellow-400';
+    case 4: return 'bg-purple-400';
+    case 5: return 'bg-red-400';
+    default: return 'bg-gray-400';
+  }
+}
+
+export default UseCaseCard;

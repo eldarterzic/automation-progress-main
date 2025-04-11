@@ -1,0 +1,191 @@
+import { UseCase } from '@/types/use-case';
+
+export const useCases: UseCase[] = [
+  {
+    id: 'uc-001',
+    title: 'Invoice Processing',
+    description: 'Automation of invoice receipt, validation, and payment approval',
+    category: 'Finance',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2023,
+    processSteps: [
+      'Receive invoice', 
+      'Extract data', 
+      'Validate against PO', 
+      'Approve payment', 
+      'Execute payment'
+    ],
+    inProduction: true,
+    channels: ['Email', 'Web'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-002',
+    title: 'Employee Onboarding',
+    description: 'Streamlined process for setting up new employees with required access and equipment',
+    category: 'Human Resources',
+    currentLevel: 1,
+    targetLevel: 3,
+    developmentYear: 2023,
+    inProduction: false,
+    channels: ['Web', 'Email'],
+    developmentTime: 'L'
+  },
+  {
+    id: 'uc-003',
+    title: 'Customer Support Ticket Routing',
+    description: 'Automated assignment of support tickets to appropriate teams based on content analysis',
+    category: 'Customer Service',
+    currentLevel: 3,
+    targetLevel: 4,
+    developmentYear: 2023,
+    inProduction: true,
+    channels: ['Email', 'App', 'Web'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-004',
+    title: 'Sales Lead Qualification',
+    description: 'Automated scoring and routing of sales leads to appropriate representatives',
+    category: 'Sales',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2023,
+    inProduction: true,
+    channels: ['Web', 'App'],
+    developmentTime: 'S'
+  },
+  {
+    id: 'uc-005',
+    title: 'Inventory Management',
+    description: 'Automated tracking and reordering of inventory based on usage patterns and forecasts',
+    category: 'Operations',
+    currentLevel: 2,
+    targetLevel: 5,
+    developmentYear: 2024,
+    inProduction: false,
+    channels: ['App', 'Web'],
+    developmentTime: 'L'
+  },
+  {
+    id: 'uc-006',
+    title: 'Compliance Reporting',
+    description: 'Automated generation and submission of regulatory compliance reports',
+    category: 'Legal',
+    currentLevel: 1,
+    targetLevel: 3,
+    developmentYear: 2024,
+    inProduction: false,
+    channels: ['Web'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-007',
+    title: 'Customer Onboarding',
+    description: 'Streamlined process for setting up new customers with accounts and services',
+    category: 'Customer Service',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2024,
+    inProduction: true,
+    channels: ['Web', 'App', 'Email'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-008',
+    title: 'Expense Report Processing',
+    description: 'Automated review and approval of employee expense reports',
+    category: 'Finance',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2024,
+    inProduction: true,
+    channels: ['Web', 'Email'],
+    developmentTime: 'S'
+  },
+  {
+    id: 'uc-009',
+    title: 'IT Service Desk',
+    description: 'Automated resolution of common IT issues and service requests',
+    category: 'IT',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2024,
+    inProduction: true,
+    channels: ['Web', 'Email', 'App'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-010',
+    title: 'Data Backup and Recovery',
+    description: 'Automated backup and recovery of critical business data',
+    category: 'IT',
+    currentLevel: 4,
+    targetLevel: 5,
+    developmentYear: 2025,
+    inProduction: true,
+    channels: ['App'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-011',
+    title: 'Social Media Content Scheduling',
+    description: 'Automated planning and posting of social media content across platforms',
+    category: 'Marketing',
+    currentLevel: 3,
+    targetLevel: 4,
+    developmentYear: 2025,
+    inProduction: false,
+    channels: ['Meta', 'Web'],
+    developmentTime: 'S'
+  },
+  {
+    id: 'uc-012',
+    title: 'Market Research Analysis',
+    description: 'Automated collection and analysis of market research data',
+    category: 'Marketing',
+    currentLevel: 1,
+    targetLevel: 3,
+    developmentYear: 2025,
+    inProduction: false,
+    channels: ['Web', 'Google'],
+    developmentTime: 'L'
+  },
+  {
+    id: 'uc-013',
+    title: 'Supply Chain Optimization',
+    description: 'Automated optimization of supply chain based on demand forecasts and constraints',
+    category: 'Operations',
+    currentLevel: 2,
+    targetLevel: 4,
+    developmentYear: 2025,
+    inProduction: false,
+    channels: ['Web'],
+    developmentTime: 'L'
+  },
+  {
+    id: 'uc-014',
+    title: 'Contract Management',
+    description: 'Automated tracking and management of contract lifecycles',
+    category: 'Legal',
+    currentLevel: 1,
+    targetLevel: 3,
+    developmentYear: 2026,
+    inProduction: false,
+    channels: ['Web', 'Email'],
+    developmentTime: 'M'
+  },
+  {
+    id: 'uc-015',
+    title: 'Performance Review Process',
+    description: 'Streamlined process for conducting employee performance reviews',
+    category: 'Human Resources',
+    currentLevel: 1,
+    targetLevel: 2,
+    developmentYear: 2026,
+    inProduction: false,
+    channels: ['Web'],
+    developmentTime: 'S'
+  }
+];
