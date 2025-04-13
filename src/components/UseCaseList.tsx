@@ -1,10 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutGrid, LayoutList, Filter } from 'lucide-react';
 import { UseCase } from '@/types/use-case';
 import UseCaseCard from './UseCaseCard';
-import { useCases as defaultUseCases } from '@/data/use-cases';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Input } from "@/components/ui/input";
 import { 
@@ -25,24 +23,58 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface UseCaseListProps {
-  useCases?: UseCase[];
   onOpenMapper?: (useCase: UseCase) => void;
 }
 
 const channels = ["Email", "SMS", "Meta", "Google", "App", "Web", "Other"];
 const developmentTimes = ["S", "M", "L"];
 
-const UseCaseList = ({ useCases = defaultUseCases, onOpenMapper }: UseCaseListProps) => {
+const UseCaseList = ({ onOpenMapper }: UseCaseListProps) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [filteredUseCases, setFilteredUseCases] = useState<UseCase[]>(useCases);
+  const [useCases, setUseCases] = useState<UseCase[]>([]);
+  const [filteredUseCases, setFilteredUseCases] = useState<UseCase[]>([]);
   const [filters, setFilters] = useState({
     production: "all", // "all", "yes", "no"
     channels: [] as string[],
     developmentTime: [] as string[]
   });
 
+  // Fetch data from the API
+  useEffect(() => {
+    const fetchUseCases = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/fetchMonthlyReach'); // Replace with your API endpoint
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Transform the API response into UseCase[]
+        const mappedUseCases: UseCase[] = data.slice(1).map((row: string[]) => ({
+          id: row[0],
+          name: row[1],
+          purpose: row[2],
+          inProduction: row[3],
+          businessUnit: row[4],
+          monthlyReach: parseInt(row[5], 10) || 0,
+          channelCosts: row[6] || undefined,
+          timeToDevelop: parseInt(row[7], 10) || 0,
+          timeToOptimize: row[8] ? parseInt(row[8], 10) : undefined,
+        }));
+
+        setUseCases(mappedUseCases); // Populate useCases with API data
+        setFilteredUseCases(mappedUseCases); // Initialize filteredUseCases with the same data
+        console.log('Fetched use cases:', mappedUseCases);
+      } catch (error) {
+        console.error('Error fetching use cases:', error.message);
+      }
+    };
+
+    fetchUseCases();
+  }, []);
+
   // Apply filters whenever they change
-  React.useEffect(() => {
+  useEffect(() => {
     let result = [...useCases];
     
     // Filter by production status
