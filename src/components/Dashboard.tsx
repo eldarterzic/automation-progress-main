@@ -26,7 +26,7 @@ const Dashboard: React.FC<DashboardProps> = ({ useCases, reportingData = [] }) =
     const fetchMonthlyReach = async () => {
       setLoading(true); // Set loading to true before the API call
       try {
-        const response = await fetch('https://automation-progress-main.vercel.app/api/fetchMonthlyReach');
+        const response = await fetch('https://automation-progress-main.vercel.app:3000/api/fetchMonthlyReach');
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -49,7 +49,7 @@ const Dashboard: React.FC<DashboardProps> = ({ useCases, reportingData = [] }) =
     const fetchUsecaseList = async () => {
       setLoading(true); // Set loading to true before the API call
       try {
-        const response = await fetch('https://automation-progress-main.vercel.app/api/fetchMonthlyReach');
+        const response = await fetch('https://automation-progress-main.vercel.app:3000/api/fetchUsecaseList');
   
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
