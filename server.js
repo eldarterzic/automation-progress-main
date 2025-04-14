@@ -31,8 +31,7 @@ app.get('/api/fetchMonthlyReach', async (req, res) => {
           spreadsheetId: SPREADSHEET_ID,
           range: SHEET_NAME,
         });
-        
-        console.log("response from server.js file");
+    
         console.log("response", response.data.values);
     
         // Disable caching

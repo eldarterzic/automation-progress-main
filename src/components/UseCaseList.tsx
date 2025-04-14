@@ -43,7 +43,7 @@ const UseCaseList = ({ onOpenMapper }: UseCaseListProps) => {
   useEffect(() => {
     const fetchUseCases = async () => {
       try {
-        const response = await fetch('https://automation-progress-main.vercel.app:3000/api/fetchMonthlyReach'); // Replace with your API endpoint
+        const response = await fetch('https://node-api-service-pearl.vercel.app/api/fetchMonthlyReach'); // Replace with your API endpoint
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

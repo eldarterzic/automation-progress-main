@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     proxy: {
       // Proxy API requests to the Express server
       "/api": {
-        target: "https://automation-progress-main.vercel.app", // Express server
+        target: "https://node-api-service-pearl.vercel.app/api/fetchMonthlyReach", // Express server
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api"), // Keep the /api prefix
       },
