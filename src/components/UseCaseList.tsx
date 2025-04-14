@@ -81,7 +81,7 @@ const UseCaseList = ({ onOpenMapper }: UseCaseListProps) => {
     if (filters.production !== "all") {
       const isInProduction = filters.production === "yes";
       result = result.filter(useCase => 
-        (useCase.inProduction === isInProduction)
+        (useCase.inProduction === (isInProduction ? "yes" : "no"))
       );
     }
     
