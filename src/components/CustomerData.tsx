@@ -16,7 +16,7 @@ const CustomerData = () => {
       availability: '99.8%'
     },
     { 
-      name: 'Club Viking', 
+      name: 'XXX XXXX', 
       status: 'operational', 
       lastSync: '30 minutes ago', 
       recordCount: '850K',

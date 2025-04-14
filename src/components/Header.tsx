@@ -35,7 +35,7 @@ const Header = () => {
       }} transition={{
         delay: 0.3,
         duration: 0.5
-      }} className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4">Data Driven Viking Line</motion.h1>
+      }} className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4">Data Driven XXXXX XXXXX</motion.h1>
         
         <motion.p initial={{
         opacity: 0

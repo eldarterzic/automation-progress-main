@@ -70,7 +70,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <CardContent className="space-y-2">
               <div className="border-b pb-2">
                 <h3 className="font-medium">Project Name</h3>
-                <p className="text-sm text-muted-foreground">Data Driven Viking Line</p>
+                <p className="text-sm text-muted-foreground">Data Driven XXX XXX</p>
               </div>
               <div className="border-b pb-2">
                 <h3 className="font-medium">Last Updated</h3>
