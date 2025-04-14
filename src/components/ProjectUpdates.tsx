@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -19,74 +18,47 @@ interface ProjectUpdate {
   isNew?: boolean;
 }
 
-const mockUpdates: ProjectUpdate[] = [
-  {
-    id: '1',
-    date: '2024-06-15',
-    title: 'New Investment Planning Use Case Deployed',
-    content: 'The steering group approved the launch of our Investment Planning automation. This solution is expected to reduce planning cycles by 65% and improve accuracy by 30%.',
-    source: 'Steering Group',
-    type: 'Launch',
-    isNew: true
-  },
-  {
-    id: '2',
-    date: '2024-06-10',
-    title: 'May Results: 22% Increase in Automation Revenue',
-    content: 'Monthly committee review shows our automation portfolio delivered €125,000 in May, a 22% increase over April. The Customer Retention module is performing particularly well.',
-    source: 'Committee',
-    type: 'Result',
-    isNew: true
-  },
-  {
-    id: '3',
-    date: '2024-06-08',
-    title: 'Risk Flag: Reporting Module Delay',
-    content: 'The weekly standup identified a delay in the Reporting module deployment. Integration with legacy systems is taking longer than expected. New ETA is July 15, two weeks behind schedule.',
-    source: 'Weekly Standup',
-    type: 'Flag',
-    isNew: true
-  },
-  {
-    id: '4',
-    date: '2024-06-01',
-    title: 'Customer Journey Mapping Automation Live',
-    content: 'Successfully deployed the Customer Journey Mapping use case across all channels. Early metrics show a 45% reduction in mapping time and improved customer insight generation.',
-    source: 'Committee',
-    type: 'Launch'
-  },
-  {
-    id: '5',
-    date: '2024-05-25',
-    title: 'April Results Exceed Targets',
-    content: 'April financial review confirms automation portfolio results are 15% above target. The Email Marketing Optimization use case contributed most significantly to this outcome.',
-    source: 'Steering Group',
-    type: 'Result'
-  },
-  {
-    id: '6',
-    date: '2024-05-18',
-    title: 'Resource Allocation Adjustment',
-    content: 'The steering group has approved reallocation of resources to accelerate the AI/ML integration project. Two additional developers will join starting June 1st.',
-    source: 'Steering Group',
-    type: 'General'
-  },
-  {
-    id: '7',
-    date: '2024-05-10',
-    title: 'Google Analytics Integration Complete',
-    content: 'The weekly standup confirmed successful completion of the Google Analytics integration. This enhancement will provide real-time performance data for all customer-facing automation use cases.',
-    source: 'Weekly Standup',
-    type: 'Launch'
-  }
-];
-
 const ProjectUpdates = () => {
   const [filter, setFilter] = useState<UpdateType | 'All'>('All');
-  
+  const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
+
+  // Fetch data from the API
+  useEffect(() => {
+    const fetchProjectUpdates = async () => {
+      try {
+        const response = await fetch('https://node-api-service-pearl.vercel.app/api/projectUpdates');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Parse the API response
+        const parsedUpdates = parseUpdates(data);
+        setUpdates(parsedUpdates);
+      } catch (error) {
+        console.error('Error fetching project updates:', error.message);
+      }
+    };
+
+    fetchProjectUpdates();
+  }, []);
+
+  // Parse the API response
+  const parseUpdates = (data: string[][]): ProjectUpdate[] => {
+    return data.slice(1).map((row, index) => ({
+      id: `${index + 1}`,
+      title: row[0],
+      source: row[1] as UpdateSource,
+      date: row[2],
+      content: row[3],
+      type: row[4] as UpdateType,
+      isNew: index < 3, // Mark the first 3 updates as "new" for demonstration
+    }));
+  };
+
   const filteredUpdates = filter === 'All' 
-    ? mockUpdates 
-    : mockUpdates.filter(update => update.type === filter);
+    ? updates 
+    : updates.filter(update => update.type === filter);
 
   const getTypeIcon = (type: UpdateType) => {
     switch (type) {
@@ -176,11 +148,7 @@ const ProjectUpdates = () => {
                     {update.source}
                   </span>
                   <span>•</span>
-                  <span>{new Date(update.date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}</span>
+                  <span>{update.date}</span>
                 </CardDescription>
               </CardHeader>
               <CardContent>
